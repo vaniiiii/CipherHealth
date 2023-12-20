@@ -9,7 +9,7 @@ import { getContractNames } from "~~/utils/scaffold-eth/contractNames";
 const selectedContractStorageKey = "scaffoldEth2.selectedContract";
 const contractNames = getContractNames();
 
-const Debug: NextPage = () => {
+const DoctorDashboard: NextPage = () => {
   const [selectedContract, setSelectedContract] = useLocalStorage<ContractName>(
     selectedContractStorageKey,
     contractNames[0],
@@ -71,4 +71,4 @@ const Debug: NextPage = () => {
   );
 };
 
-export default Debug;
+export default DoctorDashboard;

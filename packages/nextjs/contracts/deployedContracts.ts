@@ -4,6 +4,422 @@
  */
 import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 
-const deployedContracts = {} as const;
+const deployedContracts = {
+  31337: {
+    CipherHealth: {
+      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      abi: [
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "verifier_",
+              type: "address",
+            },
+          ],
+          stateMutability: "nonpayable",
+          type: "constructor",
+        },
+        {
+          inputs: [],
+          name: "CipherHealth__HealthRecordExpired",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "CipherHealth__HealthRecordNFTAlreadyIssued",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "CipherHealth__InvalidProof",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "CipherHealth__NotAuthorizedForAddingDoctors",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "CipherHealth__NotAuthorizedForAddingRecords",
+          type: "error",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              internalType: "address",
+              name: "doctorAddress",
+              type: "address",
+            },
+          ],
+          name: "DoctorRegistered",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "healthRecordId",
+              type: "uint256",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "patientAddress",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "doctorAddress",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "uint48",
+              name: "endTimestamp",
+              type: "uint48",
+            },
+          ],
+          name: "HealthRecordAdded",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              internalType: "address",
+              name: "operatorAddress",
+              type: "address",
+            },
+          ],
+          name: "OperatorRegistered",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "previousOwner",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "newOwner",
+              type: "address",
+            },
+          ],
+          name: "OwnershipTransferStarted",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "previousOwner",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "newOwner",
+              type: "address",
+            },
+          ],
+          name: "OwnershipTransferred",
+          type: "event",
+        },
+        {
+          inputs: [],
+          name: "acceptOwnership",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "commitment",
+              type: "uint256",
+            },
+            {
+              internalType: "address",
+              name: "patientAddress",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "doctorAddress",
+              type: "address",
+            },
+            {
+              internalType: "uint48",
+              name: "endTimestamp",
+              type: "uint48",
+            },
+          ],
+          name: "addHealthRecord",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "healthRecordId_",
+              type: "uint256",
+            },
+          ],
+          name: "getHealthRecord",
+          outputs: [
+            {
+              components: [
+                {
+                  internalType: "uint256",
+                  name: "commitment",
+                  type: "uint256",
+                },
+                {
+                  internalType: "address",
+                  name: "patientAddress",
+                  type: "address",
+                },
+                {
+                  internalType: "address",
+                  name: "doctorAddress",
+                  type: "address",
+                },
+                {
+                  internalType: "uint48",
+                  name: "endTimestamp",
+                  type: "uint48",
+                },
+              ],
+              internalType: "struct CipherHealth.HealthRecord",
+              name: "",
+              type: "tuple",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          name: "healthRecordNFTIssued",
+          outputs: [
+            {
+              internalType: "bool",
+              name: "",
+              type: "bool",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          name: "healthRecords",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "commitment",
+              type: "uint256",
+            },
+            {
+              internalType: "address",
+              name: "patientAddress",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "doctorAddress",
+              type: "address",
+            },
+            {
+              internalType: "uint48",
+              name: "endTimestamp",
+              type: "uint48",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "healthRecordId_",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256[8]",
+              name: "proof",
+              type: "uint256[8]",
+            },
+          ],
+          name: "issueNFT",
+          outputs: [],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          name: "operators",
+          outputs: [
+            {
+              internalType: "bool",
+              name: "",
+              type: "bool",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "owner",
+          outputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "pendingOwner",
+          outputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "doctorAddress",
+              type: "address",
+            },
+          ],
+          name: "registerDoctor",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "operatorAddress",
+              type: "address",
+            },
+          ],
+          name: "registerOperator",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "renounceOwnership",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "newOwner",
+              type: "address",
+            },
+          ],
+          name: "transferOwnership",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          name: "verifiedDoctors",
+          outputs: [
+            {
+              internalType: "bool",
+              name: "",
+              type: "bool",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "verifier",
+          outputs: [
+            {
+              internalType: "contract IVerifier",
+              name: "",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+      ],
+      inheritedFunctions: {
+        acceptOwnership: "@openzeppelin/contracts/access/Ownable2Step.sol",
+        owner: "@openzeppelin/contracts/access/Ownable2Step.sol",
+        pendingOwner: "@openzeppelin/contracts/access/Ownable2Step.sol",
+        renounceOwnership: "@openzeppelin/contracts/access/Ownable2Step.sol",
+        transferOwnership: "@openzeppelin/contracts/access/Ownable2Step.sol",
+      },
+    },
+  },
+} as const;
 
 export default deployedContracts satisfies GenericContractsDeclaration;
