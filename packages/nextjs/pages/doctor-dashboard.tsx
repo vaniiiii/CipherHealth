@@ -54,8 +54,9 @@ const DoctorDashboard: NextPage = () => {
               <ContractUI
                 key={contractName}
                 contractName={contractName}
-                allowedFunctions={allowedFunctionsForDoctor} // Pass allowed functions for doctors
+                allowedFunctions={allowedFunctionsForDoctor}
                 className={contractName === selectedContract ? "" : "hidden"}
+                dashboardType="doctor"
               />
             ))}
           </>

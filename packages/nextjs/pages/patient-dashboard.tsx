@@ -49,6 +49,7 @@ const PatientDashboard: React.FC = () => {
                 contractName={contractName}
                 allowedFunctions={allowedFunctionsForPatient}
                 className={contractName === selectedContract ? "" : "hidden"}
+                dashboardType="patient"
               />
             ))}
           </>
