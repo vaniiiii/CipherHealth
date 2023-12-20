@@ -2,7 +2,13 @@ import { ReadOnlyFunctionForm } from "./ReadOnlyFunctionForm";
 import { Abi, AbiFunction } from "abitype";
 import { Contract, ContractName, GenericContract, InheritedFunctions } from "~~/utils/scaffold-eth/contract";
 
-export const ContractReadMethods = ({ deployedContractData }: { deployedContractData: Contract<ContractName> }) => {
+export const ContractReadMethods = ({
+  deployedContractData,
+  allowedFunctions,
+}: {
+  deployedContractData: Contract<ContractName>;
+  allowedFunctions: string[];
+}) => {
   if (!deployedContractData) {
     return null;
   }
@@ -11,9 +17,10 @@ export const ContractReadMethods = ({ deployedContractData }: { deployedContract
     ((deployedContractData.abi || []) as Abi).filter(part => part.type === "function") as AbiFunction[]
   )
     .filter(fn => {
+      // Check if function is allowed and is queryable with params
       const isQueryableWithParams =
         (fn.stateMutability === "view" || fn.stateMutability === "pure") && fn.inputs.length > 0;
-      return isQueryableWithParams;
+      return allowedFunctions.includes(fn.name) && isQueryableWithParams;
     })
     .map(fn => {
       return {
@@ -24,7 +31,7 @@ export const ContractReadMethods = ({ deployedContractData }: { deployedContract
     .sort((a, b) => (b.inheritedFrom ? b.inheritedFrom.localeCompare(a.inheritedFrom) : 1));
 
   if (!functionsToDisplay.length) {
-    return <>No read methods</>;
+    return <>No read methods available.</>;
   }
 
   return (

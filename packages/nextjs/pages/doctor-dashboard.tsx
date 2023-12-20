@@ -9,6 +9,9 @@ import { getContractNames } from "~~/utils/scaffold-eth/contractNames";
 const selectedContractStorageKey = "scaffoldEth2.selectedContract";
 const contractNames = getContractNames();
 
+// Define the allowed functions for the doctor dashboard
+const allowedFunctionsForDoctor = ["addHealthRecord", "registerDoctor", "registerOperator", "getHealthRecord"];
+
 const DoctorDashboard: NextPage = () => {
   const [selectedContract, setSelectedContract] = useLocalStorage<ContractName>(
     selectedContractStorageKey,
@@ -24,12 +27,12 @@ const DoctorDashboard: NextPage = () => {
   return (
     <>
       <MetaHeader
-        title="Debug Contracts | Scaffold-ETH 2"
-        description="Debug your deployed 🏗 Scaffold-ETH 2 contracts in an easy way"
+        title="Doctor Dashboard | Medical Management"
+        description="Easily manage your medical contracts and patient data"
       />
       <div className="flex flex-col gap-y-6 lg:gap-y-8 py-8 lg:py-12 justify-center items-center">
         {contractNames.length === 0 ? (
-          <p className="text-3xl mt-14">No contracts found!</p>
+          <p className="text-3xl mt-14">No patient data available!</p>
         ) : (
           <>
             {contractNames.length > 1 && (
@@ -51,6 +54,7 @@ const DoctorDashboard: NextPage = () => {
               <ContractUI
                 key={contractName}
                 contractName={contractName}
+                allowedFunctions={allowedFunctionsForDoctor} // Pass allowed functions for doctors
                 className={contractName === selectedContract ? "" : "hidden"}
               />
             ))}
@@ -58,12 +62,12 @@ const DoctorDashboard: NextPage = () => {
         )}
       </div>
       <div className="text-center mt-8 bg-secondary p-10">
-        <h1 className="text-4xl my-0">Debug Contracts</h1>
+        <h1 className="text-4xl my-0">Patient Contract Management</h1>
         <p className="text-neutral">
-          You can debug & interact with your deployed contracts here.
-          <br /> Check{" "}
+          Interact and manage your contracts related to patient care and services.
+          <br /> Explore features in{" "}
           <code className="italic bg-base-300 text-base font-bold [word-spacing:-0.5rem] px-1">
-            packages / nextjs / pages / debug.tsx
+            packages / nextjs / pages / doctor-dashboard.tsx
           </code>{" "}
         </p>
       </div>

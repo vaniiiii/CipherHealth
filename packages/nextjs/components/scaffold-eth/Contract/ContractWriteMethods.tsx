@@ -5,9 +5,11 @@ import { Contract, ContractName, GenericContract, InheritedFunctions } from "~~/
 export const ContractWriteMethods = ({
   onChange,
   deployedContractData,
+  allowedFunctions, // Add allowedFunctions prop
 }: {
   onChange: () => void;
   deployedContractData: Contract<ContractName>;
+  allowedFunctions: string[]; // Include allowedFunctions in the props
 }) => {
   if (!deployedContractData) {
     return null;
@@ -18,7 +20,7 @@ export const ContractWriteMethods = ({
   )
     .filter(fn => {
       const isWriteableFunction = fn.stateMutability !== "view" && fn.stateMutability !== "pure";
-      return isWriteableFunction;
+      return isWriteableFunction && allowedFunctions.includes(fn.name); // Check if function is allowed
     })
     .map(fn => {
       return {
@@ -29,7 +31,7 @@ export const ContractWriteMethods = ({
     .sort((a, b) => (b.inheritedFrom ? b.inheritedFrom.localeCompare(a.inheritedFrom) : 1));
 
   if (!functionsToDisplay.length) {
-    return <>No write methods</>;
+    return <>No write methods available.</>;
   }
 
   return (

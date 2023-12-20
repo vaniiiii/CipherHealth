@@ -160,11 +160,6 @@ const deployedContracts = {
               type: "address",
             },
             {
-              internalType: "address",
-              name: "doctorAddress",
-              type: "address",
-            },
-            {
               internalType: "uint48",
               name: "endTimestamp",
               type: "uint48",
