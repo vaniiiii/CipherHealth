@@ -3,10 +3,9 @@ pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/access/Ownable2Step.sol";
 
-// TO-DO
-// Write NFT contract
-// NatSpec
-// Git repo init
+/// @title CipherHealth Contract
+/// @notice This contract allows doctors to add health records for patients and issue NFTs for those records.
+/// @dev This contract is Ownable2Step, which means that certain operations require a two-step verification process.
 contract CipherHealth is Ownable2Step {
 	// Define a struct to hold public inputs related to sickness
 	struct HealthRecord {
@@ -61,10 +60,16 @@ contract CipherHealth is Ownable2Step {
 		_;
 	}
 
+	/// @notice Constructor function that sets the verifier address
+	/// @param verifier_ The address of the verifier contract
 	constructor(address verifier_) {
 		verifier = IVerifier(verifier_);
 	}
 
+	/// @notice Adds a health record for a patient
+	/// @param commitment The commitment value associated with the health record
+	/// @param patientAddress The address of the patient
+	/// @param endTimestamp The end timestamp of the health record
 	function addHealthRecord(
 		uint256 commitment,
 		address patientAddress,
@@ -91,6 +96,9 @@ contract CipherHealth is Ownable2Step {
 		);
 	}
 
+	/// @notice Issues an NFT for a health record
+	/// @param healthRecordId_ The ID of the health record
+	/// @param proof The proof array used for verification
 	function issueNFT(uint256 healthRecordId_, uint[8] memory proof) external {
 		if (!healthRecordNFTIssued[healthRecordId]) {
 			revert CipherHealth__HealthRecordNFTAlreadyIssued();
@@ -127,6 +135,8 @@ contract CipherHealth is Ownable2Step {
 		IHealthRecordNFT(healthRecordNFTAddress).mint(patientAddress);
 	}
 
+	/// @notice Registers a doctor
+	/// @param doctorAddress The address of the doctor to be registered
 	function registerDoctor(
 		address doctorAddress
 	) external onlyOwnerOrOperator {
@@ -134,11 +144,15 @@ contract CipherHealth is Ownable2Step {
 		emit DoctorRegistered(doctorAddress);
 	}
 
+	/// @notice Registers an operator
+	/// @param operatorAddress The address of the operator to be registered
 	function registerOperator(address operatorAddress) external onlyOwner {
 		operators[operatorAddress] = true;
 		emit OperatorRegistered(operatorAddress);
 	}
 
+	/// @notice Sets the address of the health record NFT contract
+	/// @param healthRecordNFTAddress_ The address of the health record NFT contract
 	function setHealthRecordNFTAddress(
 		address healthRecordNFTAddress_
 	) external onlyOwner {
@@ -149,17 +163,24 @@ contract CipherHealth is Ownable2Step {
 		healthRecordNFTAddressSet = true;
 	}
 
+	/// @notice Gets a health record by ID
+	/// @param healthRecordId_ The ID of the health record
+	/// @return The HealthRecord struct
 	function getHealthRecord(
 		uint256 healthRecordId_
 	) public view returns (HealthRecord memory) {
 		return healthRecords[healthRecordId_];
 	}
 
+	/// @notice Gets the total count of health records
+	/// @return The total count of health records
 	function getHealthRecordCount() public view returns (uint256) {
 		return healthRecordId;
 	}
 }
 
+/// @title IVerifier
+/// @notice Interface for the Verifier contract
 interface IVerifier {
 	function verifyProof(
 		uint256[2] calldata _pA,
@@ -169,6 +190,8 @@ interface IVerifier {
 	) external view returns (bool);
 }
 
+/// @title IHealthRecordNFT
+/// @notice Interface for the HealthRecordNFT contract
 interface IHealthRecordNFT {
 	function mint(address to) external;
 }
