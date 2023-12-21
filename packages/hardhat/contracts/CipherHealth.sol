@@ -17,6 +17,8 @@ contract CipherHealth is Ownable2Step {
 	}
 
 	uint256 healthRecordId;
+	address public healthRecordNFTAddress;
+	bool internal healthRecordNFTAddressSet;
 
 	mapping(uint256 => HealthRecord) public healthRecords;
 	mapping(uint256 => bool) public healthRecordNFTIssued; // health record id => is issued (NFT)
@@ -37,10 +39,12 @@ contract CipherHealth is Ownable2Step {
 
 	// errors
 	error CipherHealth__NotAuthorizedForAddingRecords();
+	error CipherHealth__NotAllowedForAddingRecordsToYourself();
 	error CipherHealth__NotAuthorizedForAddingDoctors();
 	error CipherHealth__HealthRecordNFTAlreadyIssued();
 	error CipherHealth__HealthRecordExpired();
 	error CipherHealth__InvalidProof();
+	error CipherHealth__NotAuthorized();
 
 	// modifiers
 	modifier onlyDoctor() {
@@ -66,6 +70,10 @@ contract CipherHealth is Ownable2Step {
 		address patientAddress,
 		uint48 endTimestamp
 	) external onlyDoctor {
+		if (patientAddress == msg.sender) {
+			revert CipherHealth__NotAllowedForAddingRecordsToYourself();
+		}
+
 		healthRecords[healthRecordId] = HealthRecord({
 			commitment: commitment,
 			patientAddress: patientAddress,
@@ -83,10 +91,7 @@ contract CipherHealth is Ownable2Step {
 		);
 	}
 
-	function issueNFT(
-		uint256 healthRecordId_,
-		uint[8] memory proof
-	) external view {
+	function issueNFT(uint256 healthRecordId_, uint[8] memory proof) external {
 		if (!healthRecordNFTIssued[healthRecordId]) {
 			revert CipherHealth__HealthRecordNFTAlreadyIssued();
 		}
@@ -119,6 +124,7 @@ contract CipherHealth is Ownable2Step {
 		}
 
 		// mint NFT
+		IHealthRecordNFT(healthRecordNFTAddress).mint(patientAddress);
 	}
 
 	function registerDoctor(
@@ -133,10 +139,24 @@ contract CipherHealth is Ownable2Step {
 		emit OperatorRegistered(operatorAddress);
 	}
 
+	function setHealthRecordNFTAddress(
+		address healthRecordNFTAddress_
+	) external onlyOwner {
+		if (healthRecordNFTAddressSet) {
+			revert CipherHealth__NotAuthorized();
+		}
+		healthRecordNFTAddress = healthRecordNFTAddress_;
+		healthRecordNFTAddressSet = true;
+	}
+
 	function getHealthRecord(
 		uint256 healthRecordId_
 	) public view returns (HealthRecord memory) {
 		return healthRecords[healthRecordId_];
+	}
+
+	function getHealthRecordCount() public view returns (uint256) {
+		return healthRecordId;
 	}
 }
 
@@ -147,4 +167,8 @@ interface IVerifier {
 		uint256[2] calldata _pC,
 		uint256[5] calldata _pubSignals
 	) external view returns (bool);
+}
+
+interface IHealthRecordNFT {
+	function mint(address to) external;
 }

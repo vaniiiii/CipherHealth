@@ -37,6 +37,16 @@ const deployedContracts = {
         },
         {
           inputs: [],
+          name: "CipherHealth__NotAllowedForAddingRecordsToYourself",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "CipherHealth__NotAuthorized",
+          type: "error",
+        },
+        {
+          inputs: [],
           name: "CipherHealth__NotAuthorizedForAddingDoctors",
           type: "error",
         },
@@ -212,6 +222,32 @@ const deployedContracts = {
           type: "function",
         },
         {
+          inputs: [],
+          name: "getHealthRecordCount",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "healthRecordNFTAddress",
+          outputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
           inputs: [
             {
               internalType: "uint256",
@@ -279,7 +315,7 @@ const deployedContracts = {
           ],
           name: "issueNFT",
           outputs: [],
-          stateMutability: "view",
+          stateMutability: "nonpayable",
           type: "function",
         },
         {
@@ -356,6 +392,19 @@ const deployedContracts = {
         {
           inputs: [],
           name: "renounceOwnership",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "healthRecordNFTAddress_",
+              type: "address",
+            },
+          ],
+          name: "setHealthRecordNFTAddress",
           outputs: [],
           stateMutability: "nonpayable",
           type: "function",
