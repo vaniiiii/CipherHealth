@@ -1,0 +1,9 @@
+{
+    "healthRecordId": "0",
+    "commitment": "2663952197444785446034539503746517985091187227646624769925316958999076373018",
+    "pacientAddress": "5",
+    "doctorAddress": "5",
+    "endTimestamp": "100",
+    "marker": "100",
+    "salt": "1000"
+}

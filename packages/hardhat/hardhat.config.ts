@@ -5,6 +5,7 @@ import "@nomicfoundation/hardhat-toolbox";
 import "hardhat-deploy";
 import "@matterlabs/hardhat-zksync-solc";
 import "@matterlabs/hardhat-zksync-verify";
+import "hardhat-circom";
 
 // If not set, it uses ours Alchemy's default API key.
 // You can get your own at https://dashboard.alchemyapi.io
@@ -135,6 +136,15 @@ const config: HardhatUserConfig = {
     etherscan: {
       apiKey: `${etherscanApiKey}`,
     },
+  },
+  circom: {
+    inputBasePath: "circuits",
+    ptau: "https://hermez.s3-eu-west-1.amazonaws.com/powersOfTau28_hez_final_15.ptau",
+    circuits: [
+      {
+        name: "cipherhealth",
+      },
+    ],
   },
 };
 
