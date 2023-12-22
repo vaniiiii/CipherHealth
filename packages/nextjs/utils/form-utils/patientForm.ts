@@ -1,4 +1,5 @@
-import { buildPoseidon } from "circomlibjs";
+import { resolve } from "path";
+import { ZKArtifact, groth16 } from "snarkjs";
 
 export interface IPatientFormData {
   healthRecordId: string;
@@ -10,26 +11,25 @@ export interface IPatientFormData {
   salt: string;
 }
 
-export const calculateProof = async (formData: IPatientFormData): Promise<any> => {
-  // Convert string data to numbers where necessary
-  const healthRecordId = parseInt(formData.healthRecordId, 10);
-  const commitment = parseInt(formData.commitment, 10); // Assuming commitment is a number
-  const endTimestamp = parseInt(formData.endTimestamp, 10);
-  const marker = parseInt(formData.marker, 10);
-  const salt = parseInt(formData.salt, 10);
+export const generateProof = async (formData: IPatientFormData): Promise<any> => {
+  // Use formData to provide input values
+  const input = {
+    healthRecordId: formData.healthRecordId,
+    commitment: formData.commitment,
+    patientAddress: formData.patientAddress,
+    doctorAddress: formData.doctorAddress,
+    endTimestamp: formData.endTimestamp,
+    marker: formData.marker,
+    salt: formData.salt,
+  };
+  console.log("input: ", input);
+  // Paths to the wasm and zkey files
+  const wasmPath: ZKArtifact = resolve(__dirname, "circuit/cipherhealth.wasm");
+  const zkeyPath: ZKArtifact = resolve(__dirname, "circuit/cipherhealth.zkey");
+  // Generating the proof
+  const { proof, publicSignals } = await groth16.fullProve(input, wasmPath, zkeyPath);
 
-  // Check for invalid inputs (NaN)
-  if ([healthRecordId, commitment, endTimestamp, marker, salt].some(isNaN)) {
-    throw new Error("Invalid input data. Please ensure all inputs are numbers.");
-  }
-
-  // Initialize Poseidon
-  const poseidon = await buildPoseidon();
-
-  // Calculate Poseidon hash (or any other logic for proof generation)
-  const hashBytes = poseidon([healthRecordId, commitment, endTimestamp, marker, salt]);
-  const hash = poseidon.F.toString(hashBytes);
-
-  // Return the proof result
-  return hash;
+  // Format the proof for Solidity smart contract call
+  const calldata = await groth16.exportSolidityCallData(proof, publicSignals);
+  return calldata;
 };

@@ -1,5 +1,5 @@
 import React, { ChangeEvent, FormEvent, useState } from "react";
-import { calculateProof } from "../utils/form-utils/patientForm";
+import { generateProof } from "../utils/form-utils/patientForm";
 
 export interface IPatientFormData {
   healthRecordId: string;
@@ -34,7 +34,14 @@ const PatientForm: React.FC = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const result = await calculateProof(formData);
+
+    // Convert endTimestamp to UNIX timestamp string
+    const submissionData = {
+      ...formData,
+      endTimestamp: (new Date(formData.endTimestamp).getTime() / 1000).toString(),
+    };
+
+    const result = await generateProof(submissionData);
     setProofResult(result);
   };
 

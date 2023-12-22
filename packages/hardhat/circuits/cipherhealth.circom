@@ -5,7 +5,7 @@ include "../../../node_modules/circomlib/circuits/poseidon.circom";
 template CalculateCommitment() { 
     // input signals
     signal input healthRecordId;
-    signal input pacientAddress;
+    signal input patientAddress;
     signal input doctorAddress;
     signal input endTimestamp;
     signal input marker;
@@ -14,7 +14,7 @@ template CalculateCommitment() {
     // Calculate the commitment
     component hashCalculation = Poseidon(6);
     hashCalculation.inputs[0] <== healthRecordId;
-    hashCalculation.inputs[1] <== pacientAddress;
+    hashCalculation.inputs[1] <== patientAddress;
     hashCalculation.inputs[2] <== doctorAddress;
     hashCalculation.inputs[3] <== endTimestamp;
     hashCalculation.inputs[4] <== marker;
@@ -30,7 +30,7 @@ template CipherHealth () {
     // public inputs   
     signal input healthRecordId;
     signal input commitment;
-    signal input pacientAddress;
+    signal input patientAddress;
     signal input doctorAddress;
     signal input endTimestamp;
 
@@ -41,7 +41,7 @@ template CipherHealth () {
     // Calculate the commitment
     component calculateCommitment = CalculateCommitment();
     calculateCommitment.healthRecordId <== healthRecordId;
-    calculateCommitment.pacientAddress <== pacientAddress;
+    calculateCommitment.patientAddress <== patientAddress;
     calculateCommitment.doctorAddress <== doctorAddress;
     calculateCommitment.endTimestamp <== endTimestamp;
     calculateCommitment.marker <== marker;
@@ -51,4 +51,4 @@ template CipherHealth () {
     
 }
 
-component main { public [ healthRecordId, commitment, pacientAddress,doctorAddress, endTimestamp ] } = CipherHealth();
+component main { public [ healthRecordId, commitment, patientAddress,doctorAddress, endTimestamp ] } = CipherHealth();
