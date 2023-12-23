@@ -1,28 +1,27 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { YourContract } from "../typechain-types";
+import { CipherHealth, Verifier } from "../typechain-types";
 
 describe("YourContract", function () {
   // We define a fixture to reuse the same setup in every test.
 
-  let yourContract: YourContract;
+  let cipherHealth: CipherHealth;
+  let verifier: Verifier;
   before(async () => {
-    const [owner] = await ethers.getSigners();
-    const yourContractFactory = await ethers.getContractFactory("YourContract");
-    yourContract = (await yourContractFactory.deploy(owner.address)) as YourContract;
-    await yourContract.deployed();
+    // const [deployer] = await ethers.getSigners();
+    const verifierFactory = await ethers.getContractFactory("Verifier");
+    const cipherHealthFactory = await ethers.getContractFactory("CipherHealth");
+
+    verifier = (await verifierFactory.deploy()) as Verifier;
+    await verifier.deployed();
+
+    cipherHealth = (await cipherHealthFactory.deploy(verifier.address)) as CipherHealth;
+    await cipherHealth.deployed();
   });
 
   describe("Deployment", function () {
-    it("Should have the right message on deploy", async function () {
-      expect(await yourContract.greeting()).to.equal("Building Unstoppable Apps!!!");
-    });
-
-    it("Should allow setting a new message", async function () {
-      const newGreeting = "Learn Scaffold-ETH 2! :)";
-
-      await yourContract.setGreeting(newGreeting);
-      expect(await yourContract.greeting()).to.equal(newGreeting);
+    it("Should have right paramaaters on deploy", async function () {
+      expect(await cipherHealth.verifier()).to.equal(verifier.address);
     });
   });
 });

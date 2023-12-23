@@ -22,7 +22,6 @@ export const generateProof = async (formData: IPatientFormData): Promise<any> =>
     marker: formData.marker,
     salt: formData.salt,
   };
-  console.log("input: ", input);
   // Paths to the wasm and zkey files
   const wasmPath: ZKArtifact = resolve(__dirname, "circuit/cipherhealth.wasm");
   const zkeyPath: ZKArtifact = resolve(__dirname, "circuit/cipherhealth.zkey");

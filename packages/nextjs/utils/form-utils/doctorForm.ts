@@ -12,6 +12,8 @@ export interface IFormData {
 export const calculateCommitment = async (formData: IFormData): Promise<any> => {
   // Convert string data to numbers
   const healthRecordId = parseInt(formData.healthRecordId, 10);
+  const patientAddress = BigInt(formData.patientAddress);
+  const doctorAddress = BigInt(formData.doctorAddress);
   const endTimestamp = parseInt(formData.endTimestamp, 10);
   const marker = parseInt(formData.marker, 10);
   const salt = parseInt(formData.salt, 10);
@@ -23,9 +25,8 @@ export const calculateCommitment = async (formData: IFormData): Promise<any> => 
 
   // Initialize Poseidon
   const poseidon = await buildPoseidon();
-
   // Calculate Poseidon hash
-  const hashBytes = poseidon([healthRecordId, endTimestamp, marker, salt]);
+  const hashBytes = poseidon([healthRecordId, patientAddress, doctorAddress, endTimestamp, marker, salt]);
   const hash = poseidon.F.toString(hashBytes);
 
   // Return the hash

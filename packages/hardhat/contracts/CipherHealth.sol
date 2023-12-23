@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
-
 import "@openzeppelin/contracts/access/Ownable2Step.sol";
 
 /// @title CipherHealth Contract
@@ -98,9 +97,16 @@ contract CipherHealth is Ownable2Step {
 
 	/// @notice Issues an NFT for a health record
 	/// @param healthRecordId_ The ID of the health record
-	/// @param proof The proof array used for verification
-	function issueNFT(uint256 healthRecordId_, uint[8] memory proof) external {
-		if (!healthRecordNFTIssued[healthRecordId]) {
+	/// @param _pA The first proof element
+	/// @param _pB The second proof element
+	/// @param _pC The third proof element
+	function issueNFT(
+		uint256 healthRecordId_,
+		uint256[2] calldata _pA,
+		uint256[2][2] calldata _pB,
+		uint256[2] calldata _pC
+	) external {
+		if (healthRecordNFTIssued[healthRecordId]) {
 			revert CipherHealth__HealthRecordNFTAlreadyIssued();
 		}
 
@@ -116,16 +122,12 @@ contract CipherHealth is Ownable2Step {
 		uint48 endTimestamp = healthRecord.endTimestamp;
 
 		uint256[5] memory _pubSignals = [
-			healthRecordId,
+			healthRecordId_,
 			commitment,
 			uint256(uint160(patientAddress)),
 			uint256(uint160(doctorAddress)),
 			uint256(endTimestamp)
 		];
-
-		uint256[2] memory _pA = [proof[0], proof[1]];
-		uint256[2][2] memory _pB = [[proof[2], proof[3]], [proof[4], proof[5]]];
-		uint256[2] memory _pC = [proof[6], proof[7]];
 
 		if (!verifier.verifyProof(_pA, _pB, _pC, _pubSignals)) {
 			revert CipherHealth__InvalidProof();

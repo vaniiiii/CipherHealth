@@ -21,22 +21,46 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   const { deployer } = await hre.getNamedAccounts();
   const { deploy } = hre.deployments;
 
-  await deploy("CipherHealth", {
+  await deploy("Verifier", {
     from: deployer,
     // Contract constructor arguments
-    args: [deployer],
+    args: [],
     log: true,
     // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
     // automatically mining the contract deployment transaction. There is no effect on live networks.
     autoMine: true,
   });
 
-  // Get the deployed contract
-  // const yourContract = await hre.ethers.getContract("YourContract", deployer);
+  const Verifier = await hre.ethers.getContract("Verifier", deployer);
+
+  await deploy("CipherHealth", {
+    from: deployer,
+    // Contract constructor arguments
+    args: [Verifier.address],
+    log: true,
+    // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
+    // automatically mining the contract deployment transaction. There is no effect on live networks.
+    autoMine: true,
+  });
+
+  const CipherHealth = await hre.ethers.getContract("CipherHealth", deployer);
+
+  await deploy("HealthRecordNFT", {
+    from: deployer,
+    // Contract constructor arguments
+    args: [CipherHealth.address],
+    log: true,
+    // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
+    // automatically mining the contract deployment transaction. There is no effect on live networks.
+    autoMine: true,
+  });
+
+  const HealthRecordNFT = await hre.ethers.getContract("HealthRecordNFT", deployer);
+  await CipherHealth.setHealthRecordNFTAddress(HealthRecordNFT.address);
 };
 
 export default deployYourContract;
 
 // Tags are useful if you have multiple deploy files and only want to run one of them.
 // e.g. yarn deploy --tags YourContract
-deployYourContract.tags = ["CipherHealth"];
+deployYourContract.tags = ["CipherHealth", "Verifier"];

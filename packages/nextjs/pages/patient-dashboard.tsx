@@ -9,7 +9,7 @@ const selectedContractStorageKey = "scaffoldEth2.selectedContract";
 const contractNames = getContractNames();
 
 // Define the allowed functions for the patient dashboard
-const allowedFunctionsForPatient = ["issueNFT", "getHealthRecord"];
+const allowedFunctionsForPatient = ["issueNFT", "getHealthRecord", "verifyProof"];
 
 const PatientDashboard: React.FC = () => {
   const [selectedContract, setSelectedContract] = useLocalStorage<ContractName>(
