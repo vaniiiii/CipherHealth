@@ -25,7 +25,7 @@ describe("CipherHealth", function () {
     const verifierFactory = await ethers.getContractFactory("Verifier");
 
     const cipherHealthFactory = await ethers.getContractFactory("CipherHealth");
-    const HealthRecordNFTFactory = await ethers.getContractFactory("HealthRecordNFT");
+    const healthRecordNFTFactory = await ethers.getContractFactory("HealthRecordNFT");
 
     verifier = (await verifierFactory.deploy()) as Verifier;
     await verifier.deployed();
@@ -33,7 +33,7 @@ describe("CipherHealth", function () {
     cipherHealth = (await cipherHealthFactory.deploy(verifier.address)) as CipherHealth;
     await cipherHealth.deployed();
 
-    healthRecordNFT = (await HealthRecordNFTFactory.deploy(cipherHealth.address)) as HealthRecordNFT;
+    healthRecordNFT = (await healthRecordNFTFactory.deploy(cipherHealth.address)) as HealthRecordNFT;
     await healthRecordNFT.deployed();
 
     await cipherHealth.registerDoctor(doctorAddress.address);
@@ -310,8 +310,8 @@ describe("CipherHealth", function () {
   describe("setHealthRecordNFTAddress", function () {
     describe("success", function () {
       it("Should set health record NFT address", async function () {
-        const HealthRecordNFTFactory = await ethers.getContractFactory("HealthRecordNFT");
-        const HealthRecordNFT = (await HealthRecordNFTFactory.deploy(cipherHealth.address)) as HealthRecordNFT;
+        const healthRecordNFTFactory = await ethers.getContractFactory("HealthRecordNFT");
+        const HealthRecordNFT = (await healthRecordNFTFactory.deploy(cipherHealth.address)) as HealthRecordNFT;
         await HealthRecordNFT.deployed();
 
         const valueBefore = await cipherHealth.healthRecordNFTAddress();
@@ -323,8 +323,8 @@ describe("CipherHealth", function () {
         expect(valueAfter).to.equal(HealthRecordNFT.address);
       });
       it("Should emit HealthRecordNFTAddressSet event", async function () {
-        const HealthRecordNFTFactory = await ethers.getContractFactory("HealthRecordNFT");
-        const HealthRecordNFT = (await HealthRecordNFTFactory.deploy(cipherHealth.address)) as HealthRecordNFT;
+        const healthRecordNFTFactory = await ethers.getContractFactory("HealthRecordNFT");
+        const HealthRecordNFT = (await healthRecordNFTFactory.deploy(cipherHealth.address)) as HealthRecordNFT;
         await HealthRecordNFT.deployed();
 
         await expect(cipherHealth.setHealthRecordNFTAddress(HealthRecordNFT.address))
