@@ -14,6 +14,7 @@ const DoctorForm: React.FC = () => {
   });
   const [calculationResult, setCalculationResult] = useState<string | null>(null);
   const [copySuccess, setCopySuccess] = useState<string>("");
+  const [unixTimestamp, setUnixTimestamp] = useState("");
 
   // Function to check if all fields are filled
   const allFieldsFilled = (): boolean => {
@@ -23,6 +24,11 @@ const DoctorForm: React.FC = () => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+
+    if (name === "endTimestamp") {
+      const unixTime = (new Date(value).getTime() / 1000).toString();
+      setUnixTimestamp(unixTime);
+    }
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -46,6 +52,7 @@ const DoctorForm: React.FC = () => {
       );
     }
   };
+
   return (
     <div className="w-full max-w-md mx-auto p-6 bg-base-200 rounded-xl shadow-lg my-8">
       <h2 className="text-2xl font-bold mb-4 text-center">Calculate Commitment</h2>
@@ -111,6 +118,15 @@ const DoctorForm: React.FC = () => {
             Copy to Clipboard
           </button>
           {copySuccess && <p className="mt-2">{copySuccess}</p>}
+        </div>
+      )}
+      {unixTimestamp && (
+        <div className="mt-4">
+          <h3 className="font-bold">Unix Timestamp:</h3>
+          <p>{unixTimestamp}</p>
+          <button onClick={() => navigator.clipboard.writeText(unixTimestamp)} className="btn btn-secondary mt-2">
+            Copy Unix Timestamp
+          </button>
         </div>
       )}
     </div>

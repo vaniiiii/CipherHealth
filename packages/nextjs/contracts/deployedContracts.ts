@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   31337: {
     CipherHealth: {
-      address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      address: "0x2b5A4e5493d4a54E717057B127cf0C000C876f9B",
       abi: [
         {
           inputs: [
@@ -22,7 +22,22 @@ const deployedContracts = {
         },
         {
           inputs: [],
+          name: "CipherHealth__CanNotCreateRecordInPast",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "CipherHealth__DoctorAlreadyRegistered",
+          type: "error",
+        },
+        {
+          inputs: [],
           name: "CipherHealth__HealthRecordExpired",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "CipherHealth__HealthRecordNFTAddressAlreadySet",
           type: "error",
         },
         {
@@ -52,7 +67,17 @@ const deployedContracts = {
         },
         {
           inputs: [],
-          name: "CipherHealth__NotAuthorizedForAddingRecords",
+          name: "CipherHealth__NotAuthorizedForAddingHealthRecords",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "CipherHealth__OperatorAlreadyRegistered",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "CipherHealth__ZeroAddress",
           type: "error",
         },
         {
@@ -66,6 +91,56 @@ const deployedContracts = {
             },
           ],
           name: "DoctorRegistered",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "healthRecordId",
+              type: "uint256",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "commitment",
+              type: "uint256",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "patientAddress",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "doctorAddress",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "uint48",
+              name: "endTimestamp",
+              type: "uint48",
+            },
+          ],
+          name: "HealthRecordAdded",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              internalType: "address",
+              name: "healthRecordNFTAddress",
+              type: "address",
+            },
+          ],
+          name: "HealthRecordNFTAddressSet",
           type: "event",
         },
         {
@@ -96,7 +171,7 @@ const deployedContracts = {
               type: "uint48",
             },
           ],
-          name: "HealthRecordAdded",
+          name: "HealthRecordNFTIssued",
           type: "event",
         },
         {
@@ -474,7 +549,7 @@ const deployedContracts = {
       },
     },
     HealthRecordNFT: {
-      address: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+      address: "0x413b1AfCa96a3df5A686d8BFBF93d30688a7f7D9",
       abi: [
         {
           inputs: [
@@ -489,12 +564,17 @@ const deployedContracts = {
         },
         {
           inputs: [],
-          name: "CipherHealth__NotAuthorizedForMinting",
+          name: "HealthRecordNFT__NotAuthorizedForMinting",
           type: "error",
         },
         {
           inputs: [],
-          name: "CipherHealth__NotAuthorizedForTransfer",
+          name: "HealthRecordNFT__NotAuthorizedForTransfer",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "HealthRecordNFT__ZeroAddress",
           type: "error",
         },
         {
@@ -825,6 +905,19 @@ const deployedContracts = {
               internalType: "string",
               name: "",
               type: "string",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "totalSupply",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
             },
           ],
           stateMutability: "view",
