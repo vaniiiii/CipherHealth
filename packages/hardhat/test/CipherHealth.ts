@@ -226,7 +226,7 @@ describe("CipherHealth", function () {
         const balanceAfter = await healthRecordNFT.balanceOf(patientAddress.address);
         expect(balanceAfter).to.equal(balanceBefore + 1);
       });
-      it("Should emit NFTIssued event", async function () {
+      it("Should emit HealthRecordNFTIssued event", async function () {
         const healthRecordId = await cipherHealth.getHealthRecordCount();
 
         const endTimestamp = (await time.latest()) + 10;
@@ -316,6 +316,15 @@ describe("CipherHealth", function () {
 
         const valueAfter = await cipherHealth.healthRecordNFTAddress();
         expect(valueAfter).to.equal(HealthRecordNFT.address);
+      });
+      it("Should emit HealthRecordNFTAddressSet event", async function () {
+        const HealthRecordNFTFactory = await ethers.getContractFactory("HealthRecordNFT");
+        const HealthRecordNFT = (await HealthRecordNFTFactory.deploy(cipherHealth.address)) as HealthRecordNFT;
+        await HealthRecordNFT.deployed();
+
+        await expect(cipherHealth.setHealthRecordNFTAddress(HealthRecordNFT.address))
+          .to.emit(cipherHealth, "HealthRecordNFTAddressSet")
+          .withArgs(HealthRecordNFT.address);
       });
     });
     describe("failure", function () {

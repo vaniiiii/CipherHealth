@@ -39,6 +39,7 @@ contract CipherHealth is Ownable2Step {
     event HealthRecordNFTIssued(
         uint256 healthRecordId, address indexed patientAddress, address indexed doctorAddress, uint48 endTimestamp
     );
+    event HealthRecordNFTAddressSet(address healthRecordNFTAddress);
 
     // errors
     error CipherHealth__ZeroAddress();
@@ -189,6 +190,8 @@ contract CipherHealth is Ownable2Step {
         }
         healthRecordNFTAddress = healthRecordNFTAddress_;
         healthRecordNFTAddressSet = true;
+
+        emit HealthRecordNFTAddressSet(healthRecordNFTAddress_);
     }
 
     /// @notice Gets a health record by ID
