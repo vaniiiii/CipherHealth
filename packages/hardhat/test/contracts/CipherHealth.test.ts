@@ -244,7 +244,9 @@ describe("CipherHealth", function () {
           endTimestamp,
         );
 
-        await expect(cipherHealth.connect(patientAddress).issueNFT(healthRecordId, calldata[0], calldata[1], calldata[2]))
+        await expect(
+          cipherHealth.connect(patientAddress).issueNFT(healthRecordId, calldata[0], calldata[1], calldata[2]),
+        )
           .to.emit(cipherHealth, "HealthRecordNFTIssued")
           .withArgs(healthRecordId, patientAddress.address, doctorAddress.address, endTimestamp);
       });
