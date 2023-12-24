@@ -1,5 +1,3 @@
-import { PromiseOrValue } from "../../typechain-types/common";
-import { BigNumberish, BigNumber } from "ethers";
 import { buildPoseidon } from "circomlibjs";
 import { ZKArtifact, groth16 } from "snarkjs";
 import { resolve } from "path";
@@ -35,6 +33,10 @@ async function calculateCommitment(
   return { commitment };
 }
 
+/*
+leaving it here for future reference if needed
+https://github.com/TheBojda/zk-merkle-tree/blob/main/src/zktree.ts#L136
+
 function convertCallData(calldata: string) {
   const argv = calldata
     .replace(/["[\]\s]/g, "")
@@ -46,14 +48,15 @@ function convertCallData(calldata: string) {
     [argv[2], argv[3]],
     [argv[4], argv[5]],
   ] as [
-    [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
-    [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
-  ];
+      [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+      [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
+    ];
   const c = [argv[6], argv[7]] as [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>];
   const input = [argv[8], argv[9]] as [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>];
 
   return { a, b, c, input };
 }
+*/
 
 async function generateProofAndCalldata(
   cipherHealth: CipherHealth,
@@ -95,7 +98,8 @@ async function generateProofAndCalldata(
   // Generating the proof
   const { proof, publicSignals } = await groth16.fullProve(input, wasmPath, zkeyPath);
   // Format the proof for Solidity smart contract call
-  const calldata = convertCallData(await groth16.exportSolidityCallData(proof, publicSignals));
+  const rawcalldata = await groth16.exportSolidityCallData(proof, publicSignals);
+  const calldata = JSON.parse("[" + rawcalldata + "]");
 
   return { calldata };
 }

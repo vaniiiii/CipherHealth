@@ -2,8 +2,8 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { time } from "@nomicfoundation/hardhat-network-helpers";
-import { CipherHealth, Verifier, HealthRecordNFT } from "../typechain-types";
-import { generateProofAndCalldata } from "./fixture/generateProofAndCalldata";
+import { CipherHealth, Verifier, HealthRecordNFT } from "../../typechain-types";
+import { generateProofAndCalldata } from "../utils/generateProofAndCalldata";
 
 describe("CipherHealth", function () {
   // We define a fixture to reuse the same setup in every test.
@@ -148,7 +148,8 @@ describe("CipherHealth", function () {
       it("Should add a health record", async function () {
         const healthRecordCountBefore = await cipherHealth.getHealthRecordCount();
         const commitment = BigInt("10422485148533736140502856433020574708126974884107362425003492141168368230646");
-        const endTimestamp = (await time.latest()) + 1;
+        const duration = 15 * 24 * 60 * 60; // 15 days
+        const endTimestamp = (await time.latest()) + duration;
 
         await cipherHealth.connect(doctorAddress).addHealthRecord(commitment, patientAddress.address, endTimestamp);
 
@@ -165,7 +166,8 @@ describe("CipherHealth", function () {
         const healthRecordId = await cipherHealth.getHealthRecordCount();
 
         const commitment = BigInt("10422485148533736140502856433020574708126974884107362425003492141168368230646");
-        const endTimestamp = (await time.latest()) + 1;
+        const duration = 15 * 24 * 60 * 60; // 15 days
+        const endTimestamp = (await time.latest()) + duration;
         await expect(
           cipherHealth.connect(doctorAddress).addHealthRecord(commitment, patientAddress.address, endTimestamp),
         )
@@ -176,14 +178,16 @@ describe("CipherHealth", function () {
     describe("failure", function () {
       it("Should fail to add a health record if caller is not doctor", async function () {
         const commitment = BigInt("10422485148533736140502856433020574708126974884107362425003492141168368230646");
-        const endTimestamp = (await time.latest()) + 1;
+        const duration = 15 * 24 * 60 * 60; // 15 days
+        const endTimestamp = (await time.latest()) + duration;
         await expect(
           cipherHealth.connect(testAddress).addHealthRecord(commitment, patientAddress.address, endTimestamp),
         ).to.be.to.be.revertedWithCustomError(cipherHealth, "CipherHealth__NotAuthorizedForAddingHealthRecords");
       });
       it("Should fail to add a health record if patient address is zero address", async function () {
         const commitment = BigInt("10422485148533736140502856433020574708126974884107362425003492141168368230646");
-        const endTimestamp = (await time.latest()) + 1;
+        const duration = 15 * 24 * 60 * 60; // 15 days
+        const endTimestamp = (await time.latest()) + duration;
         await expect(
           cipherHealth.connect(doctorAddress).addHealthRecord(commitment, ethers.constants.AddressZero, endTimestamp),
         ).to.be.to.be.revertedWithCustomError(cipherHealth, "CipherHealth__ZeroAddress");
@@ -197,7 +201,8 @@ describe("CipherHealth", function () {
       });
       it("Should fail to add a health record if doctor address is patient address", async function () {
         const commitment = BigInt("10422485148533736140502856433020574708126974884107362425003492141168368230646");
-        const endTimestamp = (await time.latest()) + 1;
+        const duration = 15 * 24 * 60 * 60; // 15 days
+        const endTimestamp = (await time.latest()) + duration;
         await expect(
           cipherHealth.connect(doctorAddress).addHealthRecord(commitment, doctorAddress.address, endTimestamp),
         ).to.be.to.be.revertedWithCustomError(cipherHealth, "CipherHealth__NotAllowedForAddingRecordsToYourself");
@@ -221,7 +226,7 @@ describe("CipherHealth", function () {
           endTimestamp,
         );
 
-        await cipherHealth.connect(patientAddress).issueNFT(healthRecordId, calldata.a, calldata.b, calldata.c);
+        await cipherHealth.connect(patientAddress).issueNFT(healthRecordId, calldata[0], calldata[1], calldata[2]);
 
         const balanceAfter = await healthRecordNFT.balanceOf(patientAddress.address);
         expect(balanceAfter).to.equal(balanceBefore + 1);
@@ -239,7 +244,7 @@ describe("CipherHealth", function () {
           endTimestamp,
         );
 
-        await expect(cipherHealth.connect(patientAddress).issueNFT(healthRecordId, calldata.a, calldata.b, calldata.c))
+        await expect(cipherHealth.connect(patientAddress).issueNFT(healthRecordId, calldata[0], calldata[1], calldata[2]))
           .to.emit(cipherHealth, "HealthRecordNFTIssued")
           .withArgs(healthRecordId, patientAddress.address, doctorAddress.address, endTimestamp);
       });
@@ -258,10 +263,10 @@ describe("CipherHealth", function () {
           endTimestamp,
         );
 
-        await cipherHealth.connect(patientAddress).issueNFT(healthRecordId, calldata.a, calldata.b, calldata.c);
+        await cipherHealth.connect(patientAddress).issueNFT(healthRecordId, calldata[0], calldata[1], calldata[2]);
 
         await expect(
-          cipherHealth.connect(patientAddress).issueNFT(healthRecordId, calldata.a, calldata.b, calldata.c),
+          cipherHealth.connect(patientAddress).issueNFT(healthRecordId, calldata[0], calldata[1], calldata[2]),
         ).to.be.to.be.revertedWithCustomError(cipherHealth, "CipherHealth__HealthRecordNFTAlreadyIssued");
       });
       it("Should fail to issue NFT if health record expired", async function () {
@@ -279,7 +284,7 @@ describe("CipherHealth", function () {
 
         await time.increaseTo(endTimestamp + 1);
         await expect(
-          cipherHealth.connect(patientAddress).issueNFT(healthRecordId, calldata.a, calldata.b, calldata.c),
+          cipherHealth.connect(patientAddress).issueNFT(healthRecordId, calldata[0], calldata[1], calldata[2]),
         ).to.be.revertedWithCustomError(cipherHealth, "CipherHealth__HealthRecordExpired");
       });
       it("Should fail to issue NFT if proof is invalid", async function () {
@@ -296,7 +301,7 @@ describe("CipherHealth", function () {
         );
 
         await expect(
-          cipherHealth.connect(patientAddress).issueNFT(healthRecordId, calldata.c, calldata.b, calldata.c),
+          cipherHealth.connect(patientAddress).issueNFT(healthRecordId, calldata[0], calldata[1], calldata[0]),
         ).to.be.to.be.revertedWithCustomError(cipherHealth, "CipherHealth__InvalidProof");
       });
     });
