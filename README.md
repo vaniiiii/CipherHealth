@@ -61,7 +61,7 @@ The Circom circuit is designed to generate a cryptographic proof, ensuring that 
 - **registerDoctor and registerOperator**: For managing access and authorizations.
 
 ### Security and Permissions
-- Uses `Ownable2Step` for critical operations, requiring two-step verification.
+- Uses `Ownable2Step` for critical operations, requiring two-step for ownership transfer.
 - Verifies doctors and operators to ensure only authorized individuals can interact with the system.
 
 ## Conclusion
