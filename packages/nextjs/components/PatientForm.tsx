@@ -17,7 +17,7 @@ const PatientForm: React.FC = () => {
     commitment: "",
     patientAddress: "",
     doctorAddress: "",
-    endTimestamp: new Date().toISOString().split("T")[0], // Current date
+    endTimestamp: "", // Current date
     marker: "",
     salt: "",
   });
@@ -40,7 +40,6 @@ const PatientForm: React.FC = () => {
     // Convert endTimestamp to UNIX timestamp string
     const submissionData = {
       ...formData,
-      endTimestamp: (new Date(formData.endTimestamp).getTime() / 1000).toString(),
     };
 
     const result = await generateProof(submissionData);
@@ -97,7 +96,8 @@ const PatientForm: React.FC = () => {
         <input
           className="input input-bordered"
           name="endTimestamp"
-          type="date"
+          type="string"
+          placeholder="Enter UNIX Timestamp"
           value={formData.endTimestamp}
           onChange={handleChange}
         />

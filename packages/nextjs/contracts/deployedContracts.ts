@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   31337: {
     CipherHealth: {
-      address: "0x2b5A4e5493d4a54E717057B127cf0C000C876f9B",
+      address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
       abi: [
         {
           inputs: [
@@ -549,7 +549,7 @@ const deployedContracts = {
       },
     },
     HealthRecordNFT: {
-      address: "0x413b1AfCa96a3df5A686d8BFBF93d30688a7f7D9",
+      address: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
       abi: [
         {
           inputs: [

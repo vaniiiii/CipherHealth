@@ -30,6 +30,5 @@ export const generateProof = async (formData: IPatientFormData): Promise<any> =>
 
   // Format the proof for Solidity smart contract call
   const rawcalldata = await groth16.exportSolidityCallData(proof, publicSignals);
-  console.log(JSON.parse("[" + rawcalldata + "]"));
   return JSON.parse("[" + rawcalldata + "]");
 };
