@@ -1,21 +1,76 @@
-# 🏗 Scaffold-ETH 2
-
+# ⚕️ Cipher Health: Enhancing Privacy in Health Records Using Blockchain and Zero-Knowledge Proofs
 <h4 align="center">
-  <a href="https://docs.scaffoldeth.io">Documentation</a> |
-  <a href="https://scaffoldeth.io">Website</a>
+  <a href="https://docs.scaffoldeth.io">Whitepaper</a> 
 </h4>
 
-🧪 An open-source, up-to-date toolkit for building decentralized applications (dapps) on the Ethereum blockchain. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts.
+## Introduction
 
-⚙️ Built using NextJS, RainbowKit, Hardhat, Wagmi, and Typescript.
+### The Challenge
 
-- ✅ **Contract Hot Reload**: Your frontend auto-adapts to your smart contract as you edit it.
-- 🪝 **[Custom hooks](https://docs.scaffoldeth.io/hooks/)**: Collection of React hooks wrapper around [wagmi](https://wagmi.sh/) to simplify interactions with smart contracts with typescript autocompletion.
-- 🧱 [**Components**](https://docs.scaffoldeth.io/components/): Collection of common web3 components to quickly build your frontend.
-- 🔥 **Burner Wallet & Local Faucet**: Quickly test your application with a burner wallet and local faucet.
-- 🔐 **Integration with Wallet Providers**: Connect to different wallet providers and interact with the Ethereum network.
+In the modern healthcare system, there's a crucial need to balance the accessibility of health records for operational purposes and the privacy of individuals' health information. Traditional methods often lead to unintended disclosure of sensitive health data, raising privacy and ethical concerns.
 
-![Debug Contracts tab](https://github.com/scaffold-eth/scaffold-eth-2/assets/55535804/1171422a-0ce4-4203-bcd4-d2d1941d198b)
+### Our Solution: Cipher Health
+Cipher Health addresses this challenge by leveraging blockchain technology and Zero-Knowledge Proofs (ZKPs) to create a secure, transparent, and privacy-preserving health record system.
+
+## Why Zero-Knowledge Proofs and Blockchain?
+
+### Blockchain: Transparency and Immutability
+- **Immutable Records**: Once health records are stored on the blockchain, they cannot be altered, ensuring the integrity of the data.
+- **Decentralization**: Eliminates reliance on centralized servers, reducing the risk of data manipulation or loss.
+- **Transparency**: Ensures transparency in the process while maintaining privacy, which is critical in healthcare operations.
+
+### Zero-Knowledge Proofs: Privacy Without Compromise
+- **Confidentiality**: Allows patients to prove their health status without revealing the exact illness or condition.
+- **Selective Disclosure**: Patients control what information they share, enhancing privacy and security.
+- **Trust**: Builds trust between parties, as the verifier knows the information is accurate without needing to see it.
+
+## The CipherHealth dApp
+
+### Overview
+Cipher Health dApp is a decentralized application that enables patients to prove their sickness without revealing their identity or the specifics of their disease.
+
+![CipherHealthArchitecture](./packages/nextjs/public/CipherHealth.png)
+
+### Key Components
+
+1. **Health Records**:
+   - Stored on the blockchain, ensuring immutability and security.
+   - Contains information such as doctor's address, endTimestamp, and patientAddress.
+   - Uses a commitment model to keep sensitive information secret.
+
+2. **Commitment**:
+   - A cryptographic commitment hides the actual disease marker.
+   - Allows proof of sickness without revealing specifics.
+
+3. **HealthRecordNFT**:
+   - A unique, soulbound token representing the patient's health record.
+   - Minted by the patient using a proof generated with their secret parameters (disease marker and salt).
+   - Verifiable and links to the patient's record without revealing sensitive data.
+
+## Circom Circuit: Ensuring Privacy and Integrity
+
+### Circuit Design
+The Circom circuit is designed to generate a cryptographic proof, ensuring that the patient knows the secret parameters of their health record without revealing them.
+
+### Workflow
+1. **Inputs**: The circuit takes both public (healthRecordId, commitment, patientAddress, doctorAddress, endTimestamp) and private inputs (marker, salt).
+2. **Commitment Calculation**: Using Poseidon hash, it computes a commitment from these inputs.
+3. **Proof Generation**: The circuit outputs a proof that this commitment corresponds to a valid health record.
+
+## Smart Contract: CipherHealth
+
+### Functions
+- **addHealthRecord**: Adds a new health record to the blockchain.
+- **issueNFT**: Issues a HealthRecordNFT based on valid proof provided by the patient.
+- **registerDoctor and registerOperator**: For managing access and authorizations.
+
+### Security and Permissions
+- Uses `Ownable2Step` for critical operations, requiring two-step verification.
+- Verifies doctors and operators to ensure only authorized individuals can interact with the system.
+
+## Conclusion
+
+CipherHealth stands as a revolutionary step in healthcare data management. By harnessing blockchain and ZKP, it offers a unique solution that maintains the confidentiality of health data while ensuring its availability for necessary verification processes. This system not only enhances data privacy but also streamlines the healthcare process, making it more efficient and trustworthy.
 
 ## Requirements
 
@@ -27,13 +82,13 @@ Before you begin, you need to install the following tools:
 
 ## Quickstart
 
-To get started with Scaffold-ETH 2, follow the steps below:
+To get started with Cipher Health, follow the steps below:
 
 1. Clone this repo & install dependencies
 
 ```
-git clone https://github.com/scaffold-eth/scaffold-eth-2.git
-cd scaffold-eth-2
+git clone https://github.com/vaniiiii/CipherHealth.git
+cd CipherHealth
 yarn install
 ```
 
@@ -59,22 +114,20 @@ This command deploys a test smart contract to the local network. The contract is
 yarn start
 ```
 
-Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the `Debug Contracts` page. You can tweak the app config in `packages/nextjs/scaffold.config.ts`.
+Visit app on: `http://localhost:3000`. You can interact with your smart contract using the `Doctor dashboard` and `Patient dashboard` pages. You can tweak the app config in `packages/nextjs/scaffold.config.ts`.
 
-Run smart contract test with `yarn hardhat:test`
+Run smart contract and zk circuit test with `yarn hardhat:test`
 
-- Edit your smart contract `YourContract.sol` in `packages/hardhat/contracts`
-- Edit your frontend in `packages/nextjs/pages`
-- Edit your deployment scripts in `packages/hardhat/deploy`
+## Page Interaction
 
-## Documentation
+### Doctor Dashboard
+![CipherHealthArchitecture](./packages/nextjs/public/DoctorDashboard.png)
 
-Visit our [docs](https://docs.scaffoldeth.io) to learn how to start building with Scaffold-ETH 2.
+### Patient Dashboard
+![CipherHealthArchitecture](./packages/nextjs/public/PatientDashboard.png)
 
-To know more about its features, check out our [website](https://scaffoldeth.io).
+## Note
+Project was built on top of Scaffold-ETH 2 template. Visit [docs](https://docs.scaffoldeth.io) to learn how to start building with Scaffold-ETH 2.
 
-## Contributing to Scaffold-ETH 2
+To know more about its features, check out [website](https://scaffoldeth.io).
 
-We welcome contributions to Scaffold-ETH 2!
-
-Please see [CONTRIBUTING.MD](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/CONTRIBUTING.md) for more information and guidelines for contributing to Scaffold-ETH 2.
