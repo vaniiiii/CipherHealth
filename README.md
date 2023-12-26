@@ -1,9 +1,4 @@
 # ⚕️ Cipher Health: Enhancing Privacy in Health Records Using Blockchain and Zero-Knowledge Proofs
-<h4 align="center">
-  <a href="https://docs.scaffoldeth.io">Whitepaper</a> 
-</h4>
-
----
 
 ## Introduction
 
