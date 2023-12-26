@@ -3,6 +3,8 @@
   <a href="https://docs.scaffoldeth.io">Whitepaper</a> 
 </h4>
 
+---
+
 ## Introduction
 
 ### The Challenge
@@ -30,7 +32,6 @@ Cipher Health addresses this challenge by leveraging blockchain technology and Z
 Cipher Health dApp is a decentralized application that enables patients to prove their sickness without revealing their identity or the specifics of their disease.
 
 ![CipherHealthArchitecture](./packages/nextjs/public/CipherHealth.png)
-
 ### Key Components
 
 1. **Health Records**:
