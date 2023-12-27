@@ -384,17 +384,17 @@ const deployedContracts = {
             },
             {
               internalType: "uint256[2]",
-              name: "_pA",
+              name: "pA",
               type: "uint256[2]",
             },
             {
               internalType: "uint256[2][2]",
-              name: "_pB",
+              name: "pB",
               type: "uint256[2][2]",
             },
             {
               internalType: "uint256[2]",
-              name: "_pC",
+              name: "pC",
               type: "uint256[2]",
             },
           ],

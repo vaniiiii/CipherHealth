@@ -121,28 +121,31 @@ contract CipherHealth is Ownable2Step {
             revert CipherHealth__CanNotCreateRecordInPast();
         }
 
-        healthRecords[healthRecordId] = HealthRecord({
+        uint256 currentHealthRecordId = healthRecordId;
+        healthRecords[currentHealthRecordId] = HealthRecord({
             commitment: commitment,
             patientAddress: patientAddress,
             doctorAddress: msg.sender,
             endTimestamp: endTimestamp
         });
 
-        ++healthRecordId;
+        unchecked {
+            ++healthRecordId;
+        }
 
-        emit HealthRecordAdded(healthRecordId - 1, commitment, patientAddress, msg.sender, endTimestamp);
+        emit HealthRecordAdded(currentHealthRecordId, commitment, patientAddress, msg.sender, endTimestamp);
     }
 
     /// @notice Issues an NFT for a health record
     /// @param healthRecordId_ The ID of the health record
-    /// @param _pA The first proof element
-    /// @param _pB The second proof element
-    /// @param _pC The third proof element
+    /// @param pA The first proof element
+    /// @param pB The second proof element
+    /// @param pC The third proof element
     function issueNFT(
         uint256 healthRecordId_,
-        uint256[2] calldata _pA,
-        uint256[2][2] calldata _pB,
-        uint256[2] calldata _pC
+        uint256[2] calldata pA,
+        uint256[2][2] calldata pB,
+        uint256[2] calldata pC
     ) external {
         if (healthRecordNFTIssued[healthRecordId]) {
             revert CipherHealth__HealthRecordNFTAlreadyIssued();
@@ -159,7 +162,7 @@ contract CipherHealth is Ownable2Step {
         address doctorAddress = healthRecord.doctorAddress;
         uint48 endTimestamp = healthRecord.endTimestamp;
 
-        uint256[5] memory _pubSignals = [
+        uint256[5] memory pubSignals = [
             healthRecordId_,
             commitment,
             uint256(uint160(patientAddress)),
@@ -172,7 +175,7 @@ contract CipherHealth is Ownable2Step {
         emit HealthRecordNFTIssued(healthRecordId_, patientAddress, doctorAddress, endTimestamp);
 
         // verify proof
-        if (!verifier.verifyProof(_pA, _pB, _pC, _pubSignals)) {
+        if (!verifier.verifyProof(pA, pB, pC, pubSignals)) {
             revert CipherHealth__InvalidProof();
         }
         // mint NFT
