@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/access/Ownable2Step.sol";
 
 /// @title CipherHealth Contract
 /// @notice This contract allows doctors to add health records for patients and issue NFTs for those records.
-/// @dev This contract is Ownable2Step, which means that certain operations require a two-step verification process.
+/// @dev This contract is Ownable2Step, which means that transfering ownership requires 2-step process.
 contract CipherHealth is Ownable2Step {
     // Define a struct to hold public inputs related to sickness
     struct HealthRecord {
